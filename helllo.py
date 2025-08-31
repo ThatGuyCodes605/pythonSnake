@@ -61,36 +61,47 @@ def change_direction(e):
 
 def move():
     global snake, snake_body, food, game_over, score
-    if (game_over):
+    if game_over:
         return
     
-    if (snake.x < 0 or snake.x >= WINDOW_WIDTH or snake.y < 0 or snake.y >= WINDOW_HEIGHT):
+    # Check wall collision
+    if snake.x < 0 or snake.x >= WINDOW_WIDTH or snake.y < 0 or snake.y >= WINDOW_HEIGHT:
         game_over = True
         return
     
+    # Check self collision
     for tile in snake_body:
-        if (snake.x == tile.x and snake.y == tile.y):
+        if snake.x == tile.x and snake.y == tile.y:
             game_over = True
             return
 
-    for i in range(len(snake_body) - 1, -1, -1):
-        tile = snake_body[i]
-        if i == 0:
-            tile.x = snake.x
-            tile.y = snake.y
-        else:
-            prev_tile = snake_body[i - 1]
-            tile.x = prev_tile.x
-            tile.y = prev_tile.y
+    # Move body (from tail to head)
+    for i in range(len(snake_body) - 1, 0, -1):
+        snake_body[i].x = snake_body[i-1].x
+        snake_body[i].y = snake_body[i-1].y
+    if snake_body:
+        snake_body[0].x = snake.x
+        snake_body[0].y = snake.y
 
+    # Eat food
     if snake.x == food.x and snake.y == food.y:
-        snake_body.append(Tile(food.x, food.y))
+        # Add new segment at tail position
+        if snake_body:
+            last = snake_body[-1]
+            snake_body.append(Tile(last.x, last.y))
+        else:
+            snake_body.append(Tile(snake.x, snake.y))
+        
+        # Move food to new random location
         food.x = random.randint(0, COLS - 1) * TILE_SIZE
         food.y = random.randint(0, ROWS - 1) * TILE_SIZE
         score += 1
 
+    # Move head
     snake.x += velocityX * TILE_SIZE
     snake.y += velocityY * TILE_SIZE
+
+
 
 
 def draw():
