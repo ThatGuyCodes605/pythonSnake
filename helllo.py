@@ -64,17 +64,6 @@ def move():
     if game_over:
         return
     
-    # Check wall collision
-    if snake.x < 0 or snake.x >= WINDOW_WIDTH or snake.y < 0 or snake.y >= WINDOW_HEIGHT:
-        game_over = True
-        return
-    
-    # Check self collision
-    for tile in snake_body:
-        if snake.x == tile.x and snake.y == tile.y:
-            game_over = True
-            return
-
     # Move body (from tail to head)
     for i in range(len(snake_body) - 1, 0, -1):
         snake_body[i].x = snake_body[i-1].x
@@ -83,23 +72,33 @@ def move():
         snake_body[0].x = snake.x
         snake_body[0].y = snake.y
 
+    # Move head
+    snake.x += velocityX * TILE_SIZE
+    snake.y += velocityY * TILE_SIZE
+
+    # Check wall collision
+    if snake.x < 0 or snake.x >= WINDOW_WIDTH or snake.y < 0 or snake.y >= WINDOW_HEIGHT:
+        game_over = True
+        return
+
+    # Check self collision (AFTER moving head!)
+    for tile in snake_body:
+        if snake.x == tile.x and snake.y == tile.y:
+            game_over = True
+            return
+
     # Eat food
     if snake.x == food.x and snake.y == food.y:
-        # Add new segment at tail position
         if snake_body:
             last = snake_body[-1]
             snake_body.append(Tile(last.x, last.y))
         else:
             snake_body.append(Tile(snake.x, snake.y))
-        
-        # Move food to new random location
+
         food.x = random.randint(0, COLS - 1) * TILE_SIZE
         food.y = random.randint(0, ROWS - 1) * TILE_SIZE
         score += 1
 
-    # Move head
-    snake.x += velocityX * TILE_SIZE
-    snake.y += velocityY * TILE_SIZE
 
 
 
