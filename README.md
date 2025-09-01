@@ -1,7 +1,7 @@
 # pythonSnake
 a simple snake game made in python with the tkinter library
 # linux/macos/windows instructions
-download and install python from https://www.python.org/downloads/
+for windows/macOS download and install python from https://www.python.org/downloads/
 
 or for debian linux distros install with: sudo apt install python3
 
