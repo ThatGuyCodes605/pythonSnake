@@ -2,7 +2,8 @@
 a simple snake game made in python with the tkinter library
 # linux/macos/windows instructions
 download and install python from https://www.python.org/downloads/
-just run: python3 helllo.py
+
+then open a terminal and run: python3 helllo.py
 # bugs
 fixed randomly dying bug
 # coming soon
